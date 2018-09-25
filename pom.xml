@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>br.org.energia.componentes</groupId>
+		<artifactId>componentes-tecnicos</artifactId>
+		<version>2.0.0</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.org.energia</groupId>
+	<artifactId>ccee-legacy-spring-boot</artifactId>
+	<name>ccee-legacy-spring-boot</name>
+	<version>1.0.2-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<scm>
+		<developerConnection>scm:svn:http://hxbs01/usvn/svn/GARQ/CCEE-LEGACY-SPRING-BOOT/trunk</developerConnection>
+	</scm>
+
+	<properties>
+		<atomikos.version>4.0.62.EVAL</atomikos.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>com.atomikos</groupId>
+				<artifactId>transactions-rest</artifactId>
+				<version>${atomikos.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.atomikos</groupId>
+				<artifactId>logcloud-client</artifactId>
+				<version>${atomikos.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.atomikos</groupId>
+				<artifactId>logcloud-service</artifactId>
+				<version>${atomikos.version}</version>
+				<scope>compile</scope>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+	
+	<modules>
+		<module>ccee-legacy-spring-boot-starter</module>
+		<module>ccee-legacy-xa-spring-boot-starter</module>
+	</modules>
+</project>

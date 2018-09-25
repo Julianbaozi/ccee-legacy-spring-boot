@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/jee 
+       http://www.springframework.org/schema/jee/spring-jee-3.2.xsd">
+
+	<jee:jndi-lookup id="fakeStateless1" lookup-on-startup="false"
+		jndi-name="fakeStateless" proxy-interface="ccee.legacy.test.ejb.FakeStateless" />
+
+	<jee:jndi-lookup id="anotherFakeStateless1"
+		jndi-name="ccee.legacy.testothermodule.ejb.AnotherFakeStateless" />
+
+	<jee:jndi-lookup id="anotherFakeStateless2" jndi-name="ejb/AnotherFakeStateless" />
+
+	<bean id="TestFacade" class="ccee.legacy.test.ejb.TestFacade"
+		scope="prototype" lazy-init="true">
+		<property name="fakeStateless" ref="fakeStateless" />
+	</bean>
+
+</beans>

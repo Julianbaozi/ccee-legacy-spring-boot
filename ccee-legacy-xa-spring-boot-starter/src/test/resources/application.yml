@@ -1,0 +1,121 @@
+logging:
+  file: ../logs/application.log
+  pattern:
+    console: "[%d{dd/MM/yy HH:mm:ss,SSS}][%t][%-5p][%c{1}][%X{x-cceerequestid}] %m %n" 
+    file: "[%d{dd/MM/yy HH:mm:ss,SSS}][%t][%-5p][%c{1}][%X{x-cceerequestid}] %m %n" 
+  level:
+    org:
+      springframework: INFO
+    br:
+      org:
+        energia: DEBUG
+    com:
+       atomikos:
+          rest:
+             spring: INFO
+server:
+  context-path: /nscl/cntr
+  port: 7774
+
+spring:
+  application:
+    name: contratos
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  redis:
+    port: 6379
+#  datasource:
+#    xa:
+#      dataSourceClassName: oracle.jdbc.xa.client.OracleXADataSource
+#      properties:
+#          user: vscarin
+#          password: qio98d
+#          URL: jdbc:oracle:thin:@h27c:1521/h27c      
+  jta:  
+    enabled: false
+    atomikos:
+      datasource:
+        bean-name: testeName
+        xa-data-source-class-name: oracle.jdbc.xa.client.OracleXADataSource
+        unique-resource-name: oraXACCEEStarterTest
+        min-pool-size: 1
+        max-pool-size: 10
+        xa-properties:
+          user: vscarin
+          password: qio98d
+          URL: jdbc:oracle:thin:@h27c:1521/h27c
+  mvc:
+    view:
+      prefix: /WEB-INF/pages/
+      suffix: .jsp
+  activemq:
+    broker-url: tcp://127.0.0.1:61616
+    user: admin
+    password: admin
+  datasource:
+    url: jdbc:oracle:thin:@h27c:1521/h27c
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    username: vscarin
+    password: qio98d
+    pool-size: 10
+hibernate:
+  show_sql: true
+  
+ccee:
+  security:
+    authentication:
+      type: PASSWORD_REQUIRED
+      allow-anonymous-user: false
+      # teste
+      datasource:
+          driver-class-name: oracle.jdbc.driver.OracleDriver
+          url: jdbc:oracle:thin:@h21b:1521/h21b
+          username: vscarin
+          password: qio98d
+      login-header-variable-name: usr_login
+    authorization:
+      unsecured-url:
+        - /remote/**
+        - /atomikos/**
+      datasource:
+        url: jdbc:oracle:thin:@h04b:1521/h04b
+        driver-class-name: oracle.jdbc.driver.OracleDriver
+        username: vscarin
+        password: qio98d
+        pool-size: 10
+      applications:
+        - NSCL_LOGIN
+        - JURIS_LOGIN
+        - SOMA_LOGIN
+        - SCDE_LOGIN
+        - NSGC_LOGIN
+  legacy:
+    interceptor: true  
+    sb: true
+    base-package: ccee.legacy.test,ccee.legacy.anotherpackage
+    import-resource-path: classpath:/WEB-INF/springmvc-servlet.xml
+    persistences:
+      -
+        entity-package: ccee.legacy.test.entity
+        unit-name: CNTR_PU
+        enabled-vigencia-interceptor: true
+        enabled-jpql-translator: true
+    web:
+      enabled-portal: false
+      enabled-site-mesh: true
+    jms:
+      enabled-listener: true
+    soap:
+      enabled-services: false
+    http-invoker:
+      enabled-services: true
+      enabled-clients: true
+      local-context-prefix: /remote
+      applications-host:
+        - chave: ccee.legacy.anothermodule.ejb
+          valor: http://localhost:3322
+    xa:
+      enable-tm: false      
