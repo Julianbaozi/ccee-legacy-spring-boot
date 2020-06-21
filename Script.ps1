@@ -70,7 +70,7 @@ Function Copia-Permissoes-Entrada {
                 $existe_nova_regra = 'TRUE'
             
             } catch {
-                'Erro ao atribuir permissão para pasta ' + $nome_item + ' -> Permissão nao existe no destino ' + $novo_grupo
+                'Erro ao atribuir permissão para pasta ' + $item.FullName + ' -> Permissão nao existe no destino ' + $novo_grupo
             }
         }
 
@@ -78,8 +78,8 @@ Function Copia-Permissoes-Entrada {
 
     #caso alguma nova regra tenha sido criada para pasta, efetiva alterações
     if ($existe_nova_regra -eq 'TRUE') {
-        'Efetivando alterações na pasta ' + $nome_item
-        $acesso | Set-Acl $nome_item
+        'Efetivando alterações na pasta ' + $item.FullName
+        $acesso | Set-Acl $item.FullName
     }
 
 }
