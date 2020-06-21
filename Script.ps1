@@ -33,8 +33,12 @@ Function Copia-Permissoes-Entrada {
         }
     }
 
+    #Nome item com padrao comum
+    $nome_item = $item.FullName.Replace('\\?\UNC\127.0.0.1\','').Replace('$\',':\')
+    
+    pause
     #consulta informações de permissões da pasta
-    $acesso = Get-Acl $item.FullName
+    $acesso = Get-Acl $nome_item
 
     #variavel de controle para identificar se houve criação de nova regra
     $existe_nova_regra = 'FALSE'
@@ -68,7 +72,7 @@ Function Copia-Permissoes-Entrada {
                 $existe_nova_regra = 'TRUE'
             
             } catch {
-                'Erro ao atribuir permissão para pasta ' + $item.FullName + ' -> Permissão nao existe no destino ' + $novo_grupo
+                'Erro ao atribuir permissão para pasta ' + $nome_item + ' -> Permissão nao existe no destino ' + $novo_grupo
             }
         }
 
@@ -76,8 +80,8 @@ Function Copia-Permissoes-Entrada {
 
     #caso alguma nova regra tenha sido criada para pasta, efetiva alterações
     if ($existe_nova_regra -eq 'TRUE') {
-        'Efetivando alterações na pasta ' + $item.FullName
-        $acesso | Set-Acl $item.FullName
+        'Efetivando alterações na pasta ' + $nome_item
+        $acesso | Set-Acl $nome_item
     }
 
 }
@@ -105,5 +109,4 @@ if ($total_argumentos -eq 3) {
 #Avalia a pasta indicada como referencia
 $pasta_raiz = '\\?\UNC\127.0.0.1\' + $pasta_raiz.Replace(':\','$\')
 $root_folder = Get-Item $pasta_raiz -Force
-
 Copia-Permissoes-Entrada($root_folder)
