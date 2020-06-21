@@ -1,7 +1,9 @@
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force;clear
-Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -value 1
+clear;
 
-$logEnable = 'TRUE'
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force;
+Set-ItemProperty 'HKLM:\System\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -value 1;
+
+$logEnable = 'false'
 
 Function Log() {
 
@@ -25,7 +27,7 @@ Function Copia-Permissoes-Entrada {
 
     if ($item.PSIsContainer) {
         #consulta todos os arquivos a partir da pasta raiz que foi indicada
-        $filhos = Get-ChildItem -LiteralPath $item.FullName
+        $filhos = Get-ChildItem $item.FullName -Force
 
         #executa o comportamento de validação e copia de grupos para cada arquivo e pasta encontrados
         ForEach ($filho in $filhos) {
@@ -33,12 +35,8 @@ Function Copia-Permissoes-Entrada {
         }
     }
 
-    #Nome item com padrao comum
-    $nome_item = $item.FullName.Replace('\\?\UNC\127.0.0.1\','').Replace('$\',':\')
-    
-    pause
     #consulta informações de permissões da pasta
-    $acesso = Get-Acl $nome_item
+    $acesso = Get-Acl $item.FullName
 
     #variavel de controle para identificar se houve criação de nova regra
     $existe_nova_regra = 'FALSE'
@@ -107,6 +105,5 @@ if ($total_argumentos -eq 3) {
 }
 
 #Avalia a pasta indicada como referencia
-$pasta_raiz = '\\?\UNC\127.0.0.1\' + $pasta_raiz.Replace(':\','$\')
-$root_folder = Get-Item $pasta_raiz -Force
+$root_folder = Get-Item -LiteralPath $pasta_raiz -Force
 Copia-Permissoes-Entrada($root_folder)
